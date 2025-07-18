@@ -4,9 +4,10 @@
 
 using Pkg
 Pkg.activate(".")
+Pkg.instantiate()
 
 using LinearAlgebra, Plots
-
+plotly()
 rangex = 0:0.1*π:2π
 s = [sin(x) for x in rangex]
 
@@ -21,6 +22,8 @@ u,s,v = svd(sc)
 
 plot(s)
 
+surface(u * diagm(s))
+
 rangex = -3:0.1:3
 rangey = 0:0.1:2
 
@@ -30,15 +33,8 @@ y0 = 0
 σx = σy = 1
 gauss = [A * exp(-(sinh(x) - x0)^2 / (2 * σx^2) - (y - y0)^2 / (2 * σy^2)) for x in rangex, y in rangey]
 
-surface(sc)
-savefig("ps.html")
-u,s,v = svd(sc)
-
-surface(u * diagm(s))
-
 m = gauss * sc'
 
-plotly()
 surface(m)
 
 ########################
@@ -56,6 +52,8 @@ C = A' * B
 u,s,v = svd(C)
 s
 plot(s)
+
+
 
 
 #######################
