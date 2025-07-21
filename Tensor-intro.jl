@@ -50,10 +50,7 @@ B = randn(5, 50)
 
 C = A' * B
 u,s,v = svd(C)
-s
 plot(s)
-
-
 
 
 #######################
@@ -98,7 +95,8 @@ p2 = plot()
 for (s, label) in zip([s1,s2,s3], ("5", "10", "20"))
   p2 = plot!(s  ./ s[1]; label)
 end
-plot(p1, p2;)
+plot(p2;)
+
 #### This is an Tensor Train and you can see the structure forces the 3rd mode to have a kruskal rank that is smaller than the dimension 
 
 K = randn(5,5,5)
