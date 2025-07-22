@@ -10,15 +10,18 @@ struct CPDObj
   Factors
 end
 
+## Factors[1] => Matrix{Number}(rank, I)
 dim(cpd::CPDObj, i::Int) = size(cpd.Factors[i])[2]
 CPrank(cpd::CPDObj) = size(cpd.Factors[1])[1]
+
+
 ## This function should take two matrices of 
 ## A(rank x I) and B (rank x J) 
 function Khatri_Rao_Product(A::Matrix, B::Matrix)
   elt = eltype(A)
   ## Loop over indices of rank I and J and save to new matrix C
   C = zeros(elt, rank, I, J)
-
+  ## C(1,i,j) = A(1,i) * B(1,j)
   return C
 end
 
@@ -39,7 +42,7 @@ cpd = CPDObj([
   randn(actual_cp_rank,J), 
   randn(actual_cp_rank,K)]);
 ## This will be our target tensor so we know the rank!
-T = randn(I,J,K)
+# T = randn(I,J,K)
 T = reconstruct(cpd)
 
 ### This algorithm we are going to use the invert the KRP optimize the problem
@@ -74,13 +77,17 @@ function random_cpd(rank, I, J, K)
   ])
 end
 
-guess_rank = 3
+guess_rank = 5
 cpguess = random_cpd(guess_rank, I, J, K)
+cpguess.Factors[2] = cpd.Factors[2]
+cpguess.Factors[3] = cpd.Factors[3]
 
 updated_CPD = Compute_CPD_Update(cpguess, 1)
 
 @show norm(T - reconstruct(cpguess)) / norm(T)
 @show norm(T - reconstruct(updated_CPD)) / norm(T)
+
+norm(cpd.Factors[1] - updated_CPD.Factors[1])
 ## contraction sequences, whats the best way to contract tensors
 ## What do we optimzer for, flops vs transposes...
 
